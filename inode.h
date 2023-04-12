@@ -32,23 +32,23 @@ struct super_block /* super block structure */
     No Of Blocks = 209740/4096 = 52 blocks */
     int no_of_blocks_used_by_superblock = ceil(((float)sizeof(super_block)) / BLOCK_SIZE);
 
-    /* Total size required for mapping between filename and inode is 36*78644/4096 = 692  */
+    /* Total size required for mapping between filename and inode is 34*78644/4096 = 653 */
     int no_of_blocks_used_by_file_inode_mapping = ceil(((float)sizeof(struct file_to_inode_mapping) * NO_OF_INODES) / BLOCK_SIZE);
 
     /* It denotes the position from where inode starts. 744 */
     int starting_index_of_inodes = no_of_blocks_used_by_superblock + no_of_blocks_used_by_file_inode_mapping;
 
-    /*  Total size required to store all inodes = 78644*52 = 999   */
-    int no_of_blocks_used_to_store_inodes = ceil(((float)(NO_OF_INODES * sizeof(struct inode))) / BLOCK_SIZE); // 8192
+    /*  Total size required to store all inodes = 78644*52/4096 = 999   */
+    int no_of_blocks_used_to_store_inodes = ceil(((float)(NO_OF_INODES * sizeof(struct inode))) / BLOCK_SIZE);
 
-    /* 52 + 692 + 999 = 1743 (reserved blocks) */
+    /* 52 + 653 + 999 = 1704 (reserved blocks) */
     int starting_index_of_data_blocks = no_of_blocks_used_by_superblock + no_of_blocks_used_by_file_inode_mapping + no_of_blocks_used_to_store_inodes;
 
-    /* 131072 - 1743 = 129329 (free blocks to store data) */
+    /* 131072 - 1704 = 129368 (free blocks to store data) */
     int total_no_of_available_blocks = DISK_BLOCKS - starting_index_of_data_blocks;
 
     bool inode_freelist[NO_OF_INODES];    // to check which inode no is free to assign to file
-    bool datablock_freelist[DISK_BLOCKS]; // to check which data block is free to allocate to file
+    bool datablock_freelist[DISK_BLOCKS]; //to check which data block is free to allocate to file
 };
 
 /******************************************************************************/
